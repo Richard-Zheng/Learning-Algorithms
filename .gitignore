@@ -31,8 +31,11 @@
 *.out
 *.app
 
-# Debugger
+# Debugger Generated
 *.dsYM
+
+# Binary files
+build
 
 # macOS
 .DS_Store
