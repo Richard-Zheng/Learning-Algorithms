@@ -12,20 +12,19 @@ int main() {
     memset(store, -1, sizeof(store));
 
     cin >> r >> c;
-    int heighest = 0;
-    int hpoint[2];
     for (int i = 1; i <= r; ++i) {
         for (int j = 1; j <= c; ++j) {
             cin >> map[i][j];
-            if (map[i][j] > heighest) {
-                heighest = map[i][j];
-                hpoint[0] = i;
-                hpoint[1] = j;
-            }
         }
     }
 
-    cout << memorized_dfs(hpoint[0], hpoint[1]) + 1 << endl;
+    int ans = 0;
+    for (int i = 1; i <= r; ++i) {
+        for (int j = 1; j <= c; ++j) {
+            ans = max(ans, memorized_dfs(i, j));
+        }
+    }
+    cout << ans + 1 << endl;
 }
 
 bool is_in_range(int x, int y) {
