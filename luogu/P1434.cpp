@@ -1,45 +1,50 @@
 #include <iostream>
 #include <cstring>
 using namespace std;
-int main() {
-    int r, c;
-    int heightAtPoint[101][101];
-    int dp[101][101]; // dp[i][j] is the length of longest access to (i, j)
-    memset(heightAtPoint, 0, sizeof(heightAtPoint));
-    memset(dp, 0, sizeof(dp));
-    cin >> r >> c;
-    for (int i = 1; i <= r; ++i) {
-        for (int j = 1; j <= c; ++j) {
-            cin >> heightAtPoint[i][j];
-        }
-    }
+const int dir[4][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+int r, c; // row 行 column 列
+int map[101][101];
+int store[101][101];
+int memorized_dfs(int x, int y);
 
+int main() {
+    memset(map, 0, sizeof(map));
+    memset(store, -1, sizeof(store));
+
+    cin >> r >> c;
+    int heighest = 0;
+    int hpoint[2];
     for (int i = 1; i <= r; ++i) {
         for (int j = 1; j <= c; ++j) {
-            if (i == 1) { // solution: longest increasing subsequence
-                if (heightAtPoint[i][j] < heightAtPoint[i][j - 1]) {
-                    dp[i][j] = dp[i][j - 1] + 1;
-                } else {
-                    dp[i][j] = 1;
-                }
-            } else {
-                if (heightAtPoint[i][j] < heightAtPoint[i][j - 1]) {
-                    dp[i][j] = max(dp[i][j], dp[i][j - 1] + 1);
-                }
-                if (heightAtPoint[i][j] < heightAtPoint[i - 1][j]) {
-                    dp[i][j] = max(dp[i][j], dp[i - 1][j] + 1);
-                }
+            cin >> map[i][j];
+            if (map[i][j] > heighest) {
+                heighest = map[i][j];
+                hpoint[0] = i;
+                hpoint[1] = j;
             }
         }
     }
 
-    int ans = 0;
-    for (int i = 1; i <= r; ++i) {
-        for (int j = 1; j <= c; ++j) {
-            ans = max(ans, dp[i][j]);
+    cout << memorized_dfs(hpoint[0], hpoint[1]) + 1 << endl;
+}
+
+bool is_in_range(int x, int y) {
+    return x > 0 && y > 0 && x <= r && y <= c;
+}
+
+int memorized_dfs(int x, int y) {
+    if (store[x][y] != -1) {
+        return store[x][y];
+    }
+    int longest_way = 0;
+    for (int d = 0; d < 4; ++d) {
+        int xx = x + dir[d][0];
+        int yy = y + dir[d][1];
+
+        if (is_in_range(xx, yy) && map[xx][yy] < map[x][y]) {
+            longest_way = max(longest_way, memorized_dfs(xx, yy) + 1);
         }
     }
-
-    cout << ans << endl;
-    return 0;
+    store[x][y] = longest_way;
+    return longest_way;
 }
