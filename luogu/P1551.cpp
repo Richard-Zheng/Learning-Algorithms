@@ -3,14 +3,14 @@
 using namespace std;
 struct Node
 {
-    int parent; // 0 for root node
+    int parent;
     int rank; // the depth of tree whose root is this
 };
 Node people[5001];
 int n, m, p;
 
 int find_root_node(int i) {
-    while (people[i].parent != 0) {
+    while (people[i].parent != i) {
         i = people[i].parent;
     }
     return i;
@@ -18,13 +18,18 @@ int find_root_node(int i) {
 bool is_in_same_tree(int i, int j) {
     if (people[i].parent == people[j].parent) {
         return true;
-    } else if (people[i].parent == 0 || people[j].parent == 0) {
+    } else if (people[i].parent == i && people[j].parent == j) {
         return false;
     }
     return is_in_same_tree(people[i].parent, people[j].parent);
 }
 int main() {
     cin >> n >> m >> p;
+
+    // init nodes
+    for (int i = 1; i <= n; ++i) {
+        people[i].parent = i;
+    }
 
     for (int i = 1; i <= m; ++i) {
         int mi, mj;
