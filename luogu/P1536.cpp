@@ -1,6 +1,8 @@
 #include <iostream>
 #include <cstring>
 #include <set>
+#include <vector>
+#include <cstdio>
 using namespace std;
 int n, m;
 int map[1001];
@@ -29,37 +31,36 @@ void link(int x, int y) {
     return;
 }
 int find() {
-    set<int> roots;
-    bool has_find[n + 1];
+    int ans = 0;
     for (int i = 1; i <= n; ++i) {
-        int x = i;
-        if (has_find[x]) {
-            continue;
+        if (map[i] == i) {
+            ++ans;
         }
-        while (map[x] != x) {
-            has_find[x] = true;
-            x = map[x];
-        }
-        roots.insert(x);
     }
-    return roots.size();
+    return ans;
 }
 int main() {
-    memset(map, 0, sizeof(map));
-    memset(rnk, 1, sizeof(rnk));
+    //vector<int> ans;
+    while (scanf("%d %d", &n, &m) == 2) {
 
-    cin >> n >> m;
+        memset(map, 0, sizeof(map));
+        memset(rnk, 1, sizeof(rnk));
 
-    // init map
-    for (int i = 1; i <= n; ++i) {
-        map[i] = i;
+        // init map
+        for (int i = 1; i <= n; ++i) {
+            map[i] = i;
+        }
+
+        if (m == 0) {
+            scanf("%d", &m);
+        }
+
+        for (int i = 1; i <= m; ++i) {
+            int x, y;
+            scanf("%d %d", &x, &y);
+            link(x, y);
+        }
+        printf("%d\n", find() - 1);
     }
-
-    for (int i = 1; i <= m; ++i) {
-        int x, y;
-        cin >> x >> y;
-        link(x, y);
-    }
-    cout << find() << endl;
     return 0;
 }
