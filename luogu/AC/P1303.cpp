@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cstring>
-#define max_digit 200001
+#define max_digit 20001
 using namespace std;
 struct BigNum {
     int ren[max_digit]; // reversed number
