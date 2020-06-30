@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 #include <string>
-#define max_digit 200001
+#define max_digit 100
 using namespace std;
 
 struct BigNum {
@@ -71,7 +71,7 @@ bool big_cmp(BigNum n1, BigNum n2) { // is n1 < n2 ? (n1 == n2 true)
 
 int n, k;
 string in;
-BigNum dp[1000][1000];
+BigNum dp[100][100];
 
 int main() {
     memset(dp, -1, sizeof(dp));
@@ -95,7 +95,7 @@ int main() {
             BigNum ans;
             ans.ren[0] = 0;
             ans.len = 1;
-            cout << "length: " << i << " mul: " << j << endl;
+            //cout << "length: " << i << " mul: " << j << endl;
             for (int k = j; k < i; ++k) {
                 //cout << "cal- ("<< stoi(in.substr(0, k)) << ") " << dp[k][j - 1] << " * " << stoi(in.substr(k, i - k)) << endl;
                 BigNum a = mul(dp[k][j - 1], str_to_big(in.substr(k, i - k)));
