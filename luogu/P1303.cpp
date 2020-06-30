@@ -3,7 +3,7 @@
 #define max_digit 200001
 using namespace std;
 struct BigNum {
-    long long ren[max_digit]; // reversed number
+    int ren[max_digit]; // reversed number
     long long len;
 };
 BigNum mul(BigNum n1, BigNum n2) {
@@ -35,25 +35,32 @@ BigNum mul(BigNum n1, BigNum n2) {
     }
     return res;
 }
+BigNum str_to_big(string in) {
+    BigNum res;
+    res.len = in.length();
+    for (int i = 0; i < res.len; ++i) {
+        res.ren[i] = in[res.len - i - 1] - '0';
+    }
+    return res;
+}
+string big_to_str(BigNum in) {
+    string out = "";
+    for (int i = in.len - 1; i >= 0; --i) {
+        out = out + (char)(in.ren[i] + '0');
+    }
+    return out;
+}
 int main() {
     BigNum n1, n2;
     string num1, num2;
     cin >> num1 >> num2;
     
-    n1.len = num1.length();
-    for (int i = 0; i < n1.len; ++i) {
-        n1.ren[i] = num1[n1.len - i - 1] - '0';
-    }
+    n1 = str_to_big(num1);
 
-    n2.len = num2.length();
-    for (int i = 0; i < n2.len; ++i) {
-        n2.ren[i] = num2[n2.len - i - 1] - '0';
-    }
+    n2 = str_to_big(num2);
 
-    BigNum res = mul(n1, n2);
-    for (int i = res.len - 1; i >= 0; --i) {
-        cout << res.ren[i];
-    }
-    cout << endl;
+    string res = big_to_str(mul(n1, n2));
+    
+    cout << res << endl;
     return 0;
 }
