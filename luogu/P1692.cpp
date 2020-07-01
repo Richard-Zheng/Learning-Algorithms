@@ -4,51 +4,51 @@
 using namespace std;
 int n, m;
 int ans = 0;
-set<int> hate[101];
+bool hate[101][101];
 bool choosen[101];
 bool ans_choosen[101];
 
-void dfs(int num, int count, bool disable[101]) {
-    choosen[num] = true;
-
-    set<int>::iterator iter = hate[num].begin();
-    for (set<int>::iterator it = hate[num].begin(); it != hate[num].end(); it++) {
-        disable[*it] = true;
-    }
-
-    bool flag = true; // is reached the bottom
-    for (int i = 1; i <= n; ++i) {
-        if (!disable[i] && !choosen[i]) {
-            flag = false;
-            dfs(i, count + 1, disable);
-        }
-    }
-    if (flag) {
+void dfs(int x, int count) {
+    if (x > n) {
         if (count > ans) {
             ans = count;
             memcpy(ans_choosen, choosen, sizeof(choosen));
         }
+        return;
     }
 
-    choosen[num] = false;
+    bool can_choose = true;
+    for (int i = 1; i <= n; ++i) {
+        if (choosen[i] && hate[x][i]) {
+            can_choose = false;
+            break;
+        }
+    }
+
+    if (can_choose) {
+        choosen[x] = true;
+        dfs(x + 1, count + 1); // choose x
+        choosen[x] = false;
+    }
+
+    dfs(x + 1, count); // not choose x
+
     return;
 }
 
 int main() {
     cin >> n >> m;
 
+    memset(hate, 0, sizeof(hate));
+    memset(choosen, 0, sizeof(choosen));
     for (int i = 1; i <= m; ++i) {
         int x, y;
         cin >> x >> y;
-        hate[x].insert(y);
-        hate[y].insert(x);
+        hate[x][y] = true;
+        hate[y][x] = true;
     }
 
-    bool disable[101];
-    memset(disable, 0, sizeof(disable));
-    for (int i = 1; i <= n; ++i) {
-        dfs(i, 1, disable);
-    }
+    dfs(1, 0);
 
     cout << ans << endl;
     for (int i = 1; i <= n; ++i) {
