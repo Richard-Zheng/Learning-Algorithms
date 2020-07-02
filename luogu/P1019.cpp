@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include <string>
 using namespace std;
 string in[21];
@@ -20,23 +21,27 @@ int coincide_length(string s1, string s2) {
     return ans;
 }
 void dfs(int x, int head, int length) {
-    if (x > n) {
+    if (x > n || x < 1) {
+        cout << "loop end with result: " << length << " head: " << in[head] << endl;
         ans = max(ans, length);
         return;
     }
 
-    int coin_len = coincide_length(in[x], in[head]);
-    if (freq[x] <= 2 && coin_len > 0 && coin_len != in[x].length() && coin_len != in[head].length()) {
+    int coin_len = coincide_length(in[head], in[x]);
+    //cout << "coin_len: " << coin_len << " " << in[head] << " " << in[x] << endl;
+    //cout << freq[x] << " " << coin_len << " " << x << " " << head << endl;
+    if (x != head && freq[x] <= 2 && coin_len > 0 && coin_len != in[x].length() && coin_len != in[head].length()) {
+        cout << "! length: " << length + in[x].length() - coin_len << endl;
         ++freq[x];
-        for (int i = 1; i <= n; ++i) {
-            dfs(i, x, length + in[x].length() - coin_len);
-        }
+        dfs(x + 1, x, length + in[x].length() - coin_len);
+        dfs(x - 1, x, length + in[x].length() - coin_len);
         --freq[x];
     }
     dfs(x + 1, head, length);
     return;
 }
 int main() {
+    memset(freq, 0, sizeof(freq));
     cin >> n;
 
     for (int i = 1; i <= n; ++i) {
