@@ -10,6 +10,8 @@ int char_to_int(char in) {
         return 1;
     } else if (in == 'B') {
         return 2;
+    } else {
+        return -1;
     }
 }
 
