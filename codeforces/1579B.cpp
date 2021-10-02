@@ -17,7 +17,8 @@ int main() {
 
     while (t--) {
         cin >> n;
-        int tmp;
+        ll tmp;
+        a.clear();
         for (int i = 1; i <= n; i++) {
             cin >> tmp;
             a.push_back(tmp);
@@ -38,8 +39,13 @@ int main() {
         while (l != n) {
             int r;
             for (int i = l; i < n; i++) {
-                if (a[i - 1] > a[i]) {
+                if (i == n - 1) {
+                    r = n;
+                    break;
+                }
+                if (a[i] > a[i + 1] || a[i + 1] > a[l - 1]) {
                     r = i + 1;
+                    break;
                 }
             }
             shift(l, r, 1);
