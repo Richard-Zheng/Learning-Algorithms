@@ -1,7 +1,9 @@
+#include <algorithm>
 #include <iostream>
 #include <map>
 using namespace std;
 int n, k;
+const int MAXK = 4e5;
 int main() {
     int t;
     cin >> t;
@@ -9,28 +11,16 @@ int main() {
         cin >> n >> k;
         int index = n - 1;
         int tmove = 0;
-        map<int, int> c;
+        int c[MAXK];
         int tmp;
         for (int i = 0; i < k; i++) {
-            cin >> tmp;
-            if (c.count(tmp)) {
-                c[tmp]++;
-            } else {
-                c[tmp] = 1;
-            }
+            cin >> c[i];
         }
-        int ans =0;
-        for (int i = n - 1; i > tmove; i--) {
-            if (c.count(i)&&c[i]!=0){
-                for (int j = 1;j<=c[i];j++){
-                    if(i > tmove){
-                        tmove+=n-i;
-                        ans++;
-                    } else {
-                        break;
-                    }
-                }
-            }
+        sort(c, c + k);
+        int ans = 0;
+        for (int i = k - 1; c[i] > tmove && i >= 0; i--) {
+            tmove += n - c[i];
+            ans++;
         }
         cout << ans << endl;
     }
