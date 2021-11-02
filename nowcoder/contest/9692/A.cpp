@@ -1,51 +1,19 @@
+#include <algorithm>
 #include <iostream>
 #include <string>
-#include <vector>
-#include <limits>
-#include <algorithm>
 using namespace std;
-typedef long long ll;
+const int MAXN = 1000000;
 int main() {
     int n;
     string s;
     cin >> n >> s;
-    s = ' ' + s;
-
-    int suffix[1000] = {0};
-    int countone[1000] = {0};
-    int countzero[1000] = {0};
-    int tmp = numeric_limits<int>::min();
-    for (int i = n; i > 0; i--) {
-        if (s[i] == '0') {
-            countzero[i] = countzero[i + 1] + 1;
-            countone[i] = countone[i + 1];
-        } else {
-            countzero[i] = countzero[i + 1];
-            countone[i] = countone[i + 1] + 1;
-        }
-        if (tmp < (countzero[i] - countone[i])) {
-            tmp = countzero[i] - countone[i];
-            suffix[i] = i;
-        } else {
-            suffix[i] = suffix[i + 1];
-        }
-    }
-
-    int ans = numeric_limits<int>::max();
-    int count = 0;
+    int dp[MAXN][3] = {0};
+    int bit;
     for (int i = 1; i <= n; i++) {
-        if (s[i] == '0') {
-            count++;
-        } else if (i == n) {
-            ans = min(ans, count);
-        } else {
-            while (s[i + 1] != '0') {
-                i++;
-            }
-            int t = count + (countzero[i] - countzero[suffix[i + 1] + 1]) + countone[suffix[i + 1]];
-            ans = min(ans, t);
-        }
+        int bit = s[i - 1] - '0';
+        dp[i][0] = dp[i - 1][0] + bit;
+        dp[i][1] = min(dp[i - 1][0] + !bit, dp[i - 1][1] + !bit);
+        dp[i][2] = min(dp[i - 1][1] + bit, dp[i - 1][2] + bit);
     }
-    cout << ans << endl;
-    return 0;
+    cout << min(dp[n][0], min(dp[n][1], dp[n][2])) << endl;
 }
