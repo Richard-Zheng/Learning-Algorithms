@@ -33,6 +33,7 @@
 *.exe
 *.out
 *.app
+*.elf
 
 # Debugger Generated
 *.dsYM
